@@ -49,6 +49,25 @@ class OrderController extends Controller
     }
 
     public function testPdf(){
-        return view('test-pdf');
+
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'default_font' => 'Times New Roman',
+            'margin_left' => 20,
+            'margin_right' => 20,
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+            'curlAllowUnsafeSslRequests' => true,
+        ]);
+        $mpdf->useSubstitutions = false;
+        $mpdf->setAutoTopMargin = 'stretch';
+        $mpdf->SetDisplayMode('fullpage');
+        $mpdf->setTitle('MOU-IHT-.pdf');
+        // $mpdf->SetDefaultBodyCSS('background', 'url('.public_path('img/surat/bg-mou.png').')');
+        // $mpdf->SetDefaultBodyCSS('background-image-resize', 6);
+        $view =  view('test-pdf');
+        $mpdf->WriteHTML($view);
+        $mpdf->Output('MOU-.pdf', 'I'); // I untuk preview, D untuk download
     }
 }
